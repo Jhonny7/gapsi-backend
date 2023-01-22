@@ -18,6 +18,8 @@ import lombok.NoArgsConstructor;
 @Data
 public class ProviderResponse {
     
+    private Long id;
+    
     private String name;
 
     private String lastName;

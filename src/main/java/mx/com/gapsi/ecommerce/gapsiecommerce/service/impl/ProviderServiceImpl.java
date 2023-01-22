@@ -36,7 +36,7 @@ public class ProviderServiceImpl implements IProviderService {
     public ProviderResponse findById(Long id) throws GeneralException {
         Provider provider = providerRepository.findById(id)
                 .orElseThrow(() -> new GeneralException("Provider not exist", HttpStatus.NOT_FOUND));
-        return new ProviderResponse(
+        return new ProviderResponse(provider.getId(),
                 provider.getName(),
                 provider.getLastName(),
                 provider.getCreateAt(),
@@ -49,6 +49,7 @@ public class ProviderServiceImpl implements IProviderService {
     @Transactional(readOnly = true)
     public List<ProviderResponse> findAll() throws GeneralException {
         return providerRepository.findAll().stream().map((provider) -> new ProviderResponse(
+                provider.getId(),
                 provider.getName(),
                 provider.getLastName(),
                 provider.getCreateAt(),
@@ -66,6 +67,7 @@ public class ProviderServiceImpl implements IProviderService {
 
             Page<ProviderResponse> pageProviders = providerRepository.findAll(paging)
                     .map((provider) -> new ProviderResponse(
+                            provider.getId(),
                             provider.getName(),
                             provider.getLastName(),
                             provider.getCreateAt(),
@@ -100,6 +102,7 @@ public class ProviderServiceImpl implements IProviderService {
                 providerRequest.getAddress()));
 
         return new ProviderResponse(
+                provider.getId(),
                 provider.getName(),
                 provider.getLastName(),
                 provider.getCreateAt(),
@@ -114,7 +117,7 @@ public class ProviderServiceImpl implements IProviderService {
 
         try {
             List<Provider> providers = providerRepository.findByName(providerRequest.getName());
-            if(!providers.isEmpty()){
+            if (!providers.isEmpty()) {
                 provider = providers.get(0);
             }
         } catch (Exception e) {
@@ -134,12 +137,13 @@ public class ProviderServiceImpl implements IProviderService {
         providerRepository.save(providerUpdate);
 
         return new ProviderResponse(
+                providerUpdate.getId(),
                 providerUpdate.getName(),
                 providerUpdate.getLastName(),
                 providerUpdate.getCreateAt(),
                 providerUpdate.getUpdateAt(),
-                provider.getBusinessName(),
-                provider.getAddress());
+                providerUpdate.getBusinessName(),
+                providerUpdate.getAddress());
     }
 
     @Override
