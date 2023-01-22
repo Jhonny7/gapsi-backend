@@ -21,6 +21,9 @@ public class ProviderRequest {
     private String name;
     @JsonProperty("last_name") 
     private String lastName;
+    @JsonProperty("business_name") 
+    private String businessName;
+    private String address;
     
 }
 

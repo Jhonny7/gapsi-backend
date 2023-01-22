@@ -40,7 +40,9 @@ public class ProviderServiceImpl implements IProviderService {
                 provider.getName(),
                 provider.getLastName(),
                 provider.getCreateAt(),
-                provider.getUpdateAt());
+                provider.getUpdateAt(),
+                provider.getBusinessName(),
+                provider.getAddress());
     }
 
     @Override
@@ -50,7 +52,9 @@ public class ProviderServiceImpl implements IProviderService {
                 provider.getName(),
                 provider.getLastName(),
                 provider.getCreateAt(),
-                provider.getUpdateAt())).collect(Collectors.toList());
+                provider.getUpdateAt(),
+                provider.getBusinessName(),
+                provider.getAddress())).collect(Collectors.toList());
     }
 
     @Override
@@ -65,7 +69,9 @@ public class ProviderServiceImpl implements IProviderService {
                             provider.getName(),
                             provider.getLastName(),
                             provider.getCreateAt(),
-                            provider.getUpdateAt()));
+                            provider.getUpdateAt(),
+                            provider.getBusinessName(),
+                            provider.getAddress()));
 
             return new PageDto(
                     pageProviders.getNumberOfElements(),
@@ -89,13 +95,17 @@ public class ProviderServiceImpl implements IProviderService {
         Provider provider = providerRepository.save(new Provider(
                 providerRequest.getName(),
                 providerRequest.getLastName(),
-                new Date()));
+                new Date(),
+                providerRequest.getBusinessName(),
+                providerRequest.getAddress()));
 
         return new ProviderResponse(
                 provider.getName(),
                 provider.getLastName(),
                 provider.getCreateAt(),
-                provider.getUpdateAt());
+                provider.getUpdateAt(),
+                provider.getBusinessName(),
+                provider.getAddress());
     }
 
     @Override
@@ -103,11 +113,14 @@ public class ProviderServiceImpl implements IProviderService {
         Provider provider = null;// Compare provider for // update
 
         try {
-            provider = providerRepository.findByName(providerRequest.getName()).get(0);
+            List<Provider> providers = providerRepository.findByName(providerRequest.getName());
+            if(!providers.isEmpty()){
+                provider = providers.get(0);
+            }
         } catch (Exception e) {
             log.error(e.getMessage(), e);
         }
-        
+
         Provider providerUpdate = providerRepository.findById(providerRequest.getId()).get();
         if (provider != null && !provider.equals(providerUpdate)) {
             throw new GeneralException("provider with name already exist", HttpStatus.UNPROCESSABLE_ENTITY);
@@ -116,13 +129,17 @@ public class ProviderServiceImpl implements IProviderService {
         providerUpdate.setName(providerRequest.getName());
         providerUpdate.setLastName(providerRequest.getLastName());
         providerUpdate.setUpdateAt(new Date());
+        providerUpdate.setAddress(providerRequest.getAddress());
+        providerUpdate.setBusinessName(providerRequest.getBusinessName());
         providerRepository.save(providerUpdate);
 
         return new ProviderResponse(
                 providerUpdate.getName(),
                 providerUpdate.getLastName(),
                 providerUpdate.getCreateAt(),
-                providerUpdate.getUpdateAt());
+                providerUpdate.getUpdateAt(),
+                provider.getBusinessName(),
+                provider.getAddress());
     }
 
     @Override

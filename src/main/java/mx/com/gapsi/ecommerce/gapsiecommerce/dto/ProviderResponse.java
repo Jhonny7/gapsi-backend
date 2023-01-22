@@ -25,4 +25,8 @@ public class ProviderResponse {
     private Date createAt; 
 
     private Date updateAt; 
+
+    private String businessName;
+
+    private String address;
 }

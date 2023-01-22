@@ -25,10 +25,12 @@ import lombok.Setter;
 @Table(name = "provider")
 public class Provider implements Serializable{
 
-    public Provider(String name, String lastName, Date createAt){
+    public Provider(String name, String lastName, Date createAt, String businessName, String address){
         this.name = name;
         this.lastName = lastName;
         this.createAt = createAt;
+        this.businessName = businessName;
+        this.address = address;
     }
 
     @Id
@@ -39,6 +41,12 @@ public class Provider implements Serializable{
 
     @Column(name = "last_name", nullable = false)
     private String lastName;
+
+    @Column(name = "business_name", nullable = false)
+    private String businessName;
+
+    @Column(name = "address", nullable = false)
+    private String address;
 
     @Column(name = "create_at", nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
